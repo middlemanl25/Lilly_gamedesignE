@@ -22,7 +22,8 @@ check=True
 while check:
     try:
         choice=int(input("choice:  "))
-        check= False
+        if choice>0 and choice<4:
+            check= False
     except ValueError:
         print("sorry wrong choice, please enter 1 to 3 only")
 
@@ -36,11 +37,11 @@ print(choice)
 GameOn=True
 while(GameOn):
     userguess=int(input("give me a number"))
-    if myNumber ==userGuess:
+    if myNumber == userguess:
         print("you guessed it!")
         GameOn=False
     else:
         print("good luck next time", myNumber)
         print("the number to guess was " + str(myNumber))
-        os.sytem('cls')
-        menu()
+os.system('cls')
+menu()
