@@ -28,6 +28,10 @@ while (GameOn):
         if mynumber== 1: 
             print("i picked rock as well")
             print("its a tie!")
+    Replay = input('Would you like to play again?')
+    if Replay == str('y') or str ('yes'):
+        menu()
+
 
 GameOn = True
 while (GameOn):
