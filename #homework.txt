@@ -1,0 +1,6 @@
+#homework
+var1= I
+var2= love
+var3= greenhill
+
+Print (var1, var2, var3)
