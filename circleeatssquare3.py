@@ -34,9 +34,15 @@ LEV_I=False
 LEV_II=False
 LEV_III=False
 SCORE=False
+SC_SIZE=False
+BG_COLOR=False
+SPRITE=False
+ON_OFF=False
+sc=True
 #menu layout
 MenuList=['Instructions','Settings', "Level I","Level II",'Level III','Scoreboard','Exit']
 SettingList=['Screen Size','Backgrnd Color','Icon','']
+SC_Sizelist=['1000 x 1000', '2000 x 2000', '3000 x 3000']
 check=True
  #for the while loop
 
@@ -116,7 +122,7 @@ def keepScore(score):
     myFile.write(scoreLine)
     myFile.close()
 def scoreBoard():
-    myFile=open('ClassStuff\CircleEatsSquare\sce.txt', 'r')
+    myFile=open('sce.txt', 'r')
     yi=150
     stuff= myFile.readlines()
     myFile.close()
@@ -140,6 +146,7 @@ def keepScore(score):
     date=datetime.datetime.now()
     print(date.strftime('%m/%d/%Y'))
     scoreLine='\n'+str(score)+"\t"+name+"\t"+date.strftime('%m/%d/%Y'+'\n')
+    global HEIGHT, WIDTH, screen
  
     # when y write it erases the prev 
     myFile=open('ClassStuff\CircleEatsSquare\sce.txt','a') 
@@ -306,16 +313,20 @@ while check:
             SCORE=False
             MAIN=True
             screCk=True
-    if ((mouse_pos[0] >20 and mouse_pos[0] <80) and (mouse_pos[1] >250 and mouse_pos[1] <290))or INST :
+    if SC_SIZE:
+        screen.fill(background)
+        TitleMenu('screensize')
+        MainMenu(SC_Sizelist)
+    if ((mouse_pos[0] >20 and mouse_pos[0] <80) and (mouse_pos[1] >250 and mouse_pos[1] <290))and MAIN :
         MAIN=False
         INST=True
-    if ((mouse_pos[0] >20 and mouse_pos[0] <80) and (mouse_pos[1] >300 and mouse_pos[1] <330))or SETT :
+    if ((mouse_pos[0] >20 and mouse_pos[0] <80) and (mouse_pos[1] >300 and mouse_pos[1] <330))and MAIN :
         MAIN=False
         SETT=True  
-    if ((mouse_pos[0] >20 and mouse_pos[0] <80) and (mouse_pos[1] >350 and mouse_pos[1] <380))or LEV_I :
+    if ((mouse_pos[0] >20 and mouse_pos[0] <80) and (mouse_pos[1] >350 and mouse_pos[1] <380))and MAIN :
         MAIN=False
         LEV_I=True   
-    if ((mouse_pos[0] >20 and mouse_pos[0] <80) and (mouse_pos[1] >400 and mouse_pos[1] <430))or LEV_II :
+    if ((mouse_pos[0] >20 and mouse_pos[0] <80) and (mouse_pos[1] >400 and mouse_pos[1] <430))and MAIN :
         MAIN=False
         LEV_II=True   
     if ((mouse_pos[0] >20 and mouse_pos[0] <80) and (mouse_pos[1] >450 and mouse_pos[1] <480))or LEV_III :
@@ -324,10 +335,22 @@ while check:
     if ((mouse_pos[0] >20 and mouse_pos[0] <80) and (mouse_pos[1] >500 and mouse_pos[1] <530))or SCORE :
         MAIN=False
         SCORE=True 
-        
-    if ((mouse_pos[0] >20 and mouse_pos[0] <80) and (mouse_pos[1] >550 and mouse_pos[1] <580)) :
-        screen.fill(background)
-        
+    if SETT and sc:
+        if ((mouse_pos[0] >20 and mouse_pos[0] <80) and (mouse_pos[1] >250 and mouse_pos[1] <290))and SETT :
+            SETT=False
+            SC_SIZE=False
+        if ((mouse_pos[0] >20 and mouse_pos[0] <80) and (mouse_pos[1] >300 and mouse_pos[1] <330))and SETT :
+            SETT=False
+            BG_COLOR=True  
+        if ((mouse_pos[0] >20 and mouse_pos[0] <80) and (mouse_pos[1] >350 and mouse_pos[1] <380))and SETT :
+            SETT=False
+            SPRITE=True   
+        if ((mouse_pos[0] >20 and mouse_pos[0] <80) and (mouse_pos[1] >400 and mouse_pos[1] <430))and SETT :
+            SETT=False
+            ON_OFF=True      
+        if ((mouse_pos[0] >20 and mouse_pos[0] <80) and (mouse_pos[1] >550 and mouse_pos[1] <580)) :
+            screen.fill(background)
+            
         keepScore(121)
         text=INST_FNT.render("dont forget to update the score", 1, BLACK)
         screen.blit(text, (40,200))
