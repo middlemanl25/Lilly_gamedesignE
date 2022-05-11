@@ -1,7 +1,7 @@
 #lilly middleman
 #Practice with pygame
 import os, time, random,math
-import pygame
+import pygame, turtle
 # K_UP                  up circle
 # K_DOWN                down circle
 # K_RIGHT               right circle
@@ -154,94 +154,97 @@ def keepScore(score):
     myFile.close()
 
 def playGame():
-    move=5 #pixels
-    #square variables
-    xs=20
-    ys=20
-    wbox=30
-    hbox=30
-    #circle variables
-    rad=15
-    xc=random.randint(rad, WIDTH-rad)
-    yc=random.randint(rad, HEIGHT-rad)
-    #inscribed Square:
-    ibox=int(rad*math.sqrt(2))
-    startpoint = (int(xc-ibox/2),int(yc-ibox/2))
-    print(startpoint[0]-ibox,startpoint[1])
-    insSquare=pygame.Rect(startpoint[0],startpoint[1],ibox,ibox)
-    #creating the rect object
-    square=pygame.Rect(xs,ys,wbox,hbox)
-    global MAIN
-    global LEV_I
-    startpoint = (int(xc-ibox/2),int(yc-ibox/2))
-    insSquare=pygame.Rect(startpoint[0],startpoint[1],ibox,ibox)
-    sq_color=colors.get(randColor)
-    MAX=10
-    jumpCount=MAX
-    JUMP=False
-    run=True
-    while run:
-        screen.fill(background)
-        keys=pygame.key.get_pressed()
-        for event in pygame.event.get():
-            if event.type==pygame.QUIT:
-                run=False
-                MAIN=True
-                LEV_I=False
-                
-                print ("Im done", run)
-                
-        if keys[pygame.K_ESCAPE]:
-            run=False        
-        if keys[pygame.K_a] and square.x >=move:
-                square.x -= move #substract 5 from the x value
-        if keys[pygame.K_d] and square.x <WIDTH-wbox:
-            square.x += move  
-        #Jumping 
-        if not JUMP:
-            if keys[pygame.K_w]:
-                square.y -= move
-            if keys[pygame.K_s]:
-                square.y += move   
-            if keys[pygame.K_SPACE]:
-                JUMP=True
-        else:
-            if jumpCount >=-MAX:
-                square.y -= jumpCount*abs(jumpCount)/2
-                jumpCount-=1
-            else:
-                jumpCount=MAX
-                JUMP=False
+        
+    import pygame
+import time
+import random
+pygame.init()
+banana=pygame.image.load("images\Pygame-Tutorials-master\Game\\banana.png")
+grape=pygame.image.load("images\Pygame-Tutorials-master\Game\grape.png")
+strawberry=pygame.image.load("images\Pygame-Tutorials-master\Game\strawberry.png")
 
-    #Finish circle
-        if keys[pygame.K_LEFT] and xc >=rad+move:
-            xc -= move 
-            insSquare.x -= move
-        if keys[pygame.K_RIGHT] and xc <=WIDTH -(rad+move):
-            xc += move  
-            insSquare.x += move
-        if keys[pygame.K_DOWN] and yc <=HEIGHT-(rad+move):
-            yc += move 
-            insSquare.y += move
-        if keys[pygame.K_UP] and yc >=rad+move:
-            yc -= move 
-            insSquare.y -= move
-            
-        checkCollide = square.colliderect(insSquare)
-        if checkCollide:
-            square.x=random.randint(wbox, WIDTH-wbox)
-            square.y=random.randint(hbox, HEIGHT-hbox)   
-            changeColor()
-            sq_color=colors.get(randColor)
-            rad +=move
-            ibox=int(rad*math.sqrt(2))
-            startpoint = (int(xc-ibox/2),int(yc-ibox/2))
-            insSquare=pygame.Rect(startpoint[0],startpoint[1],ibox,ibox)
-        pygame.draw.rect(screen, sq_color, square)
-        pygame.draw.rect(screen,cr_color, insSquare )
-        pygame.draw.circle(screen, cr_color, (xc,yc), rad)
-        pygame.display.update()
-        pygame.time.delay(10)
+banana=pygame.transform.scale(banana,(60,64))
+grape=pygame.transform.scale(grape,(64,64))
+strawberry=pygame.transform.scale(strawberry,(64,64))
+
+randomfruits = [(banana), (grape),(strawberry)]
+
+HEIGHT=False
+WIDTH=False
+CRadius=15
+move=5
+fruit=random.choice(randomfruits)
+print(fruit)
+white = (255, 255, 255)
+black = (0, 0, 0)
+red = (255, 0, 0)
+ 
+dis_width = 800
+dis_height  = 600
+xc=random.randint(0,dis_width)
+yc=random.randint(0,dis_height)
+dis = pygame.display.set_mode((dis_width, dis_height))
+pygame.display.set_caption('Snake Game by Lilly')
+
+
+ 
+game_over = False
+ 
+x1 = dis_width/2
+y1 = dis_height/2
+ 
+snake_block=10
+ 
+x1_change = 0
+y1_change = 0
+ 
+clock = pygame.time.Clock()
+snake_speed=30
+ 
+font_style = pygame.font.SysFont(None, 50)
+ 
+def message(msg,color):
+    mesg = font_style.render(msg, True, color)
+    dis.blit(mesg, [dis_width/2, dis_height/2])
+ 
+while not game_over:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            game_over = True
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                x1_change = -snake_block
+                y1_change = 0
+            elif event.key == pygame.K_RIGHT:
+                x1_change = snake_block
+                y1_change = 0
+            elif event.key == pygame.K_UP:
+                y1_change = -snake_block
+                x1_change = 0
+            elif event.key == pygame.K_DOWN:
+                y1_change = snake_block
+                x1_change = 0
+ 
+    # if x1 >= dis_width or x1 < 0 or y1 >= dis_height or y1 < 0:
+    if x1 >= dis_width or y1 >= dis_height or y1 < 0 or x1<0:
+        game_over = True
+ 
+    x1 += x1_change
+    y1 += y1_change
+    dis.fill((0,0,255))
+    pygame.draw.rect(dis, black, [x1, y1, snake_block, snake_block])
+    dis.blit(fruit,(xc,yc))
+    
+    pygame.display.update()
+ 
+    clock.tick(snake_speed)
+ 
+message("You lost",red)
+pygame.display.update()
+time.sleep(2)
+ 
+pygame.quit()
+quit() 
 #sq_color=colors.get('navy')
 #Making a rand c f the square
 changeColor()
